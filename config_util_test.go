@@ -4,7 +4,7 @@ import (
     "fmt"
     "testing"
 
-    "monchickey"
+    "github.com/zengzhiying/gomonchickey"
 )
 
 // go test -v config_util_test.go

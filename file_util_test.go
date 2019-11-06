@@ -6,7 +6,7 @@ import (
 
     "time"
 
-    "monchickey"
+    "github.com/zengzhiying/gomonchickey"
 )
 
 // go test -v file_util_test.go
