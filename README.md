@@ -1,2 +1,1 @@
-# gomonchickey
-go语言实现的工具库
+# gomonchickey - go语言实现的工具库
