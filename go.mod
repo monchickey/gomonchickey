@@ -1,4 +1,4 @@
-module monchickey
+module github.com/zengzhiying/gomonchickey
 
 go 1.12
 
