@@ -83,4 +83,24 @@ func TestDataProcess(t *testing.T) {
     }
     fmt.Println()
     fmt.Println(monchickey.BytesToUint16Smallend(dstBytes2[:5]))
+
+
+    a := uint32(1)
+    b := uint32(4294967295)
+    fmt.Println(monchickey.SetUint32Bit(&a, 1, 1))
+    fmt.Println(monchickey.SetUint32Bit(&b, 32, 0))
+    // 2147483649 4294967294
+    fmt.Println(a, b)
+    // 1
+    fmt.Println(monchickey.GetUint32Bit(b, 5))
+    // 0
+    fmt.Println(monchickey.GetUint32Bit(a, 31))
+
+    c := uint64(1)
+    d := uint64(18446744073709551615)
+    // 9223372036854775809
+    fmt.Println(monchickey.SetUint64Bit(&c, 1, 1))
+    // 9223372036854775807
+    fmt.Println(monchickey.SetUint64Bit(&d, 1, 0))
+    fmt.Println(c, d)
 }

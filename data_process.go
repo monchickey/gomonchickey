@@ -176,3 +176,66 @@ func BytesToUint16Smallend(bs []byte) ([]uint16, error) {
     }
     return src, nil
 }
+
+// 设置uint32指定位的值
+// index是从高位到低位, 范围: 1 - 32
+func SetUint32Bit(num *uint32, index, value uint8) (err error) {
+    if index > 32 || index == 0 {
+        err = errors.New("Index range is 1 to 32.")
+        return
+    }
+    err = nil
+    switch value {
+    case 0:
+        *num &= ^(1 << (32 - index))
+    case 1:
+        *num |= 1 << (32 - index)
+    default:
+        err = errors.New("Value can only be 0 or 1.")
+    }
+    return
+}
+
+// 获取uint32指定位的值, index从高位到低位: 1 - 32
+func GetUint32Bit(num uint32, index uint8) (value uint8, err error) {
+    if index > 32 || index == 0 {
+        err = errors.New("Index range is 1 to 32.")
+        return
+    }
+    err = nil
+    movBit := 32 - index
+    value = uint8((num & (1 << movBit)) >> movBit)
+    return
+}
+
+// 设置uint64指定位的值
+// index是从高位到低位, index依次为: 1 - 64
+func SetUint64Bit(num *uint64, index, value uint8) (err error) {
+    if index > 64 || index == 0 {
+        err = errors.New("Index range is 1 to 64.")
+        return
+    }
+    err = nil
+    switch value {
+    case 0:
+        *num &= ^(1 << (64 - index))
+    case 1:
+        *num |= 1 << (64 - index)
+    default:
+        err = errors.New("Value can only be 0 or 1.")
+    }
+    return
+}
+
+// 获取uint64指定位的值
+// index从高位到低位依次为: 1 - 64
+func GetUint64Bit(num uint64, index uint8) (value uint8, err error) {
+    if index > 64 || index == 0 {
+        err = errors.New("Index range is 1 to 64.")
+        return
+    }
+    err = nil
+    movBit := 64 - index
+    value = uint8((num & (1 << movBit)) >> movBit)
+    return
+}

@@ -1,6 +1,6 @@
 module github.com/zengzhiying/gomonchickey
 
-go 1.12
+go 1.13
 
 require (
 	github.com/OneOfOne/xxhash v1.2.6
