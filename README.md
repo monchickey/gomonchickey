@@ -63,12 +63,12 @@ func main() {
 
 ```
 > output:  
-2020-02-23 15:05:55
-Hello monchickey!
-SGVsbG8gbW9uY2hpY2tleSE=
-(113.56291, 36.9271) geohash Encode: ww8f04mgzw75
-ww8f04mgzw75 Decode:( 113.56290997937322 36.92709996365011 )
-Polygon: (1,1)-(1,4)-(4,4)-(4,1): 
-  (1, 1) in 0
-  (2, 2) in 1
-  (5, 1) in -1
+2020-02-23 15:05:55  
+Hello monchickey!  
+SGVsbG8gbW9uY2hpY2tleSE=  
+(113.56291, 36.9271) geohash Encode: ww8f04mgzw75  
+ww8f04mgzw75 Decode:( 113.56290997937322 36.92709996365011 )  
+Polygon: (1,1)-(1,4)-(4,4)-(4,1):  
+  (1, 1) in 0  
+  (2, 2) in 1  
+  (5, 1) in -1  
