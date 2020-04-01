@@ -120,6 +120,109 @@ func HexDecode(s string) ([]byte, error) {
     return hex.DecodeString(s)
 }
 
+// uint64数字小端方式打包字节流
+func Uint64PackLittleEndian(num uint64) []byte {
+    b := make([]byte, 8)
+    b[0] = byte(num)
+    b[1] = byte(num >> 8)
+    b[2] = byte(num >> 16)
+    b[3] = byte(num >> 24)
+    b[4] = byte(num >> 32)
+    b[5] = byte(num >> 40)
+    b[6] = byte(num >> 48)
+    b[7] = byte(num >> 56)
+    return b
+}
+
+// 小端方式解包字节数组为uint64数字
+func Uint64UnpackLittleEndian(b []byte) uint64 {
+    _ = b[7]
+    return uint64(b[0]) | uint64(b[1])<<8 | uint64(b[2])<<16 | uint64(b[3])<<24 | 
+        uint64(b[4])<<32 | uint64(b[5])<<40 | uint64(b[6])<<48 | uint64(b[7])<<56
+}
+
+// uint64数字大端方式打包字节流
+func Uint64PackBigEndian(v uint64) []byte {
+    b := make([]byte, 8)
+    b[0] = byte(v >> 56)
+    b[1] = byte(v >> 48)
+    b[2] = byte(v >> 40)
+    b[3] = byte(v >> 32)
+    b[4] = byte(v >> 24)
+    b[5] = byte(v >> 16)
+    b[6] = byte(v >> 8)
+    b[7] = byte(v)
+    return b
+}
+
+// 从字节数组大端方式解包uint64
+func Uint64UnpackBigEndian(b []byte) uint64 {
+    _ = b[7]
+    return uint64(b[7]) | uint64(b[6])<<8 | uint64(b[5])<<16 | uint64(b[4])<<24 | 
+        uint64(b[3])<<32 | uint64(b[2])<<40 | uint64(b[1])<<48 | uint64(b[0])<<56
+
+}
+
+// uint32小端打包
+func Uint32PackLittleEndian(v uint32) []byte {
+    b := make([]byte, 4)
+    b[0] = byte(v)
+    b[1] = byte(v >> 8)
+    b[2] = byte(v >> 16)
+    b[3] = byte(v >> 24)
+    return b
+}
+
+// uint32小端解包
+func Uint32UnpackLittleEndian(b []byte) uint32 {
+    _ = b[3]
+    return uint32(b[0]) | uint32(b[1])<<8 | uint32(b[2])<<16 | uint32(b[3])<<24
+}
+
+// uint32大端打包
+func Uint32PackBigEndian(v uint32) []byte {
+    b := make([]byte, 4)
+    b[0] = byte(v >> 24)
+    b[1] = byte(v >> 16)
+    b[2] = byte(v >> 8)
+    b[3] = byte(v)
+    return b
+}
+
+// uint32大端解包
+func Uint32UnpackBigEndian(b []byte) uint32 {
+    _ = b[3]
+    return uint32(b[3]) | uint32(b[2])<<8 | uint32(b[1])<<16 | uint32(b[0])<<24
+}
+
+// uint16小端打包
+func Uint16PackLittleEndian(v uint16) []byte {
+    b := make([]byte, 2)
+    b[0] = byte(v)
+    b[1] = byte(v >> 8)
+    return b
+}
+
+// uint16小端解包
+func Uint16UnpackLittleEndian(b []byte) uint16 {
+    _ = b[1]
+    return uint16(b[0]) | uint16(b[1])<<8
+}
+
+// uint16大端打包
+func Uint16PackBigEndian(v uint16) []byte {
+    b := make([]byte, 2)
+    b[0] = byte(v >> 8)
+    b[1] = byte(v)
+    return b
+}
+
+// uint16大端解包
+func Uint16UnpackBigEndian(b []byte) uint16 {
+    _ = b[1]
+    return uint16(b[1]) | uint16(b[0])<<8
+}
+
 // 打包uint8序列为二进制序列
 func Uint8ToBytes(seq []uint8) []byte {
     dstBytes := make([]byte, len(seq))
@@ -130,11 +233,11 @@ func Uint8ToBytes(seq []uint8) []byte {
 }
 
 // 打包uint16序列为二进制序列[大端]
-func Uint16ToBytesBigend(seq []uint16) []byte {
+func Uint16ToBytesBigEndian(seq []uint16) []byte {
     dstBytes := make([]byte, len(seq) * 2)
     for i, value := range seq {
         high := uint8(value >> 8)
-        low := uint8(value & 0xff)
+        low := uint8(value)
         dstBytes[2 * i] = high
         dstBytes[2 * i + 1] = low
     }
@@ -142,11 +245,11 @@ func Uint16ToBytesBigend(seq []uint16) []byte {
 }
 
 // 打包uint16序列为二进制序列[小端]
-func Uint16ToBytesSmallend(seq []uint16) []byte {
+func Uint16ToBytesLittleEndian(seq []uint16) []byte {
     dstBytes := make([]byte, len(seq) * 2)
     for i , value := range seq {
         high := uint8(value >> 8)
-        low := uint8(value & 0xff)
+        low := uint8(value)
         dstBytes[2 * i] = low
         dstBytes[2 * i + 1] = high
     }
@@ -154,25 +257,25 @@ func Uint16ToBytesSmallend(seq []uint16) []byte {
 }
 
 // 解包二进制数组为uint16切片[大端]
-func BytesToUint16Bigend(bs []byte) ([]uint16, error) {
+func BytesToUint16BigEndian(bs []byte) ([]uint16, error) {
     if len(bs) % 2 != 0 {
         return nil, errors.New("Byte length must be a multiple of 2!")
     }
     src := make([]uint16, len(bs) / 2)
     for i := 0; i < len(bs); i += 2 {
-        src[i / 2] = (uint16(bs[i]) << 8) + uint16(bs[i + 1])
+        src[i / 2] = uint16(bs[i]) << 8 | uint16(bs[i + 1])
     }
     return src, nil
 }
 
 // 解包二进制数组为uint16切片[小端]
-func BytesToUint16Smallend(bs []byte) ([]uint16, error) {
+func BytesToUint16LittleEndian(bs []byte) ([]uint16, error) {
     if len(bs) % 2 != 0 {
         return nil, errors.New("Byte length must be a multiple of 2!")
     }
     src := make([]uint16, len(bs) / 2)
     for i := 0; i < len(bs); i += 2 {
-        src[i / 2] = (uint16(bs[i + 1]) << 8) + uint16(bs[i])
+        src[i / 2] = uint16(bs[i + 1]) << 8 | uint16(bs[i])
     }
     return src, nil
 }
@@ -237,5 +340,33 @@ func GetUint64Bit(num uint64, index uint8) (value uint8, err error) {
     err = nil
     movBit := 64 - index
     value = uint8((num & (1 << movBit)) >> movBit)
+    return
+}
+
+
+// 计算数字的绝对值, int64类型
+func Int64Abs(v int64) int64 {
+    n := v >> 63
+    return (v ^ n) - n
+}
+
+
+// 计算区间[x1, y1]和[x2, y2]的交集区间
+// 比如: [-1, 6]与[2, 8]返回: [2, 6], error为nil
+// 如果重合在1点, 比如[3,5]与[5,7], 则返回: [5,5]
+// 如果区间没有交集, 则error不为nil
+func IntervalIntersection(x1, y1, x2, y2 int64) (left, right int64, err error) {
+    if x2 <= y1 && x1 <= y2 {
+        err = nil
+        left, right = x1, y1
+        if x2 > x1 {
+            left = x2
+        }
+        if y2 < y1 {
+            right = y2
+        }
+        return
+    }
+    err = errors.New("No intersection of the two groups.")
     return
 }

@@ -65,24 +65,24 @@ func TestDataProcess(t *testing.T) {
 
     src16Seq := []uint16{28, 2819, 2901, 182}
     // 001c0b030b5500b6
-    dstBytes := monchickey.Uint16ToBytesBigend(src16Seq)
+    dstBytes := monchickey.Uint16ToBytesBigEndian(src16Seq)
     fmt.Printf("%q\n", monchickey.EncodeToHex(dstBytes))
     // 1c00030b550bb600
-    dstBytes2 := monchickey.Uint16ToBytesSmallend(src16Seq)
+    dstBytes2 := monchickey.Uint16ToBytesLittleEndian(src16Seq)
     fmt.Printf("%q\n", monchickey.EncodeToHex(dstBytes2))
 
-    src1, _ := monchickey.BytesToUint16Bigend(dstBytes)
+    src1, _ := monchickey.BytesToUint16BigEndian(dstBytes)
     for _, num := range src1 {
         fmt.Printf("%d ", num)
     }
     fmt.Println("")
-    fmt.Println(monchickey.BytesToUint16Bigend(dstBytes[:5]))
-    src2, _ := monchickey.BytesToUint16Smallend(dstBytes2)
+    fmt.Println(monchickey.BytesToUint16BigEndian(dstBytes[:5]))
+    src2, _ := monchickey.BytesToUint16LittleEndian(dstBytes2)
     for _, num := range src2 {
         fmt.Printf("%d ", num)
     }
     fmt.Println()
-    fmt.Println(monchickey.BytesToUint16Smallend(dstBytes2[:5]))
+    fmt.Println(monchickey.BytesToUint16LittleEndian(dstBytes2[:5]))
 
 
     a := uint32(1)
@@ -103,4 +103,25 @@ func TestDataProcess(t *testing.T) {
     // 9223372036854775807
     fmt.Println(monchickey.SetUint64Bit(&d, 1, 0))
     fmt.Println(c, d)
+}
+
+func TestPack(t *testing.T) {
+    a := uint64(18282918212901)
+    b := uint32(999996)
+    c := uint16(8912)
+
+    bs := monchickey.Uint64PackLittleEndian(a)
+    fmt.Println("uint64 little:", monchickey.Uint64UnpackLittleEndian(bs))
+    bs = monchickey.Uint64PackBigEndian(a)
+    fmt.Println("uint64 big:", monchickey.Uint64UnpackBigEndian(bs))
+
+    bs = monchickey.Uint32PackLittleEndian(b)
+    fmt.Println("uint32 little:", monchickey.Uint32UnpackLittleEndian(bs))
+    bs = monchickey.Uint32PackBigEndian(b)
+    fmt.Println("uint32 big:", monchickey.Uint32UnpackBigEndian(bs))
+
+    bs = monchickey.Uint16PackLittleEndian(c)
+    fmt.Println("uint16 little:", monchickey.Uint16UnpackLittleEndian(bs))
+    bs = monchickey.Uint16PackBigEndian(c)
+    fmt.Println("uint16 big:", monchickey.Uint16UnpackBigEndian(bs))
 }
