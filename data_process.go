@@ -6,6 +6,7 @@ import (
     "errors"
     "encoding/base64"
     "encoding/hex"
+    "encoding/binary"
 )
 
 // 数据结构常用操作的封装
@@ -278,6 +279,38 @@ func BytesToUint16LittleEndian(bs []byte) ([]uint16, error) {
         src[i / 2] = uint16(bs[i + 1]) << 8 | uint16(bs[i])
     }
     return src, nil
+}
+
+// float32小端方式打包为字节数组
+func Float32PackLittleEndian(f float32) []byte {
+    // 转为uint32
+    num := math.Float32bits(f)
+    value := make([]byte, 4)
+    binary.LittleEndian.PutUint32(value, num)
+    return value
+}
+
+// float32小端方式解包
+func Float32UnpackLittleEndian(v []byte) float32 {
+    _ = v[3]
+    num := binary.LittleEndian.Uint32(v)
+    return math.Float32frombits(num)
+}
+
+// float64小端方式打包为字节数组
+func Float64PackLittleEndian(f float64) []byte {
+    // 转为uint64
+    num := math.Float64bits(f)
+    value := make([]byte, 8)
+    binary.LittleEndian.PutUint64(value, num)
+    return value
+}
+
+// float64小端方式解包
+func Float64UnpackLittleEndian(v []byte) float64 {
+    _ = v[7]
+    num := binary.LittleEndian.Uint64(v)
+    return math.Float64frombits(num)
 }
 
 // 设置uint32指定位的值

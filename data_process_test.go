@@ -124,4 +124,13 @@ func TestPack(t *testing.T) {
     fmt.Println("uint16 little:", monchickey.Uint16UnpackLittleEndian(bs))
     bs = monchickey.Uint16PackBigEndian(c)
     fmt.Println("uint16 big:", monchickey.Uint16UnpackBigEndian(bs))
+
+    fmt.Println("float32/64 testing ====")
+    f1 := float32(32.282)
+    f2 := 7872.3982
+
+    fp1 := monchickey.Float32UnpackLittleEndian(monchickey.Float32PackLittleEndian(f1))
+    fp2 := monchickey.Float64UnpackLittleEndian(monchickey.Float64PackLittleEndian(f2))
+    fmt.Println(fp1, fp2)
+    fmt.Println(fp1 == f1, fp2 == f2)
 }
